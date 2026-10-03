@@ -25,6 +25,7 @@ import {
   generateSyntheticReferenceCardImage,
   type SyntheticPreset,
 } from '../lib/syntheticImages.ts';
+import { DemoPicturesGallery } from './DemoPicturesGallery.tsx';
 
 export interface CapturedImageData {
   imageUrl: string;
@@ -779,129 +780,30 @@ export const CaptureView: React.FC<CaptureViewProps> = ({
 
       {/* Synthetic Demo Presets Modal */}
       {showDemoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="w-full max-w-lg rounded-md bg-white border border-slate-200 p-5 shadow-xl space-y-4 my-auto text-left">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="w-full max-w-3xl rounded-xl bg-white border border-slate-200 p-5 shadow-2xl space-y-4 my-auto text-left max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-slate-800" />
-                <h3 className="text-sm font-semibold text-slate-900">
-                  Select Calibrated Scenario
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <h3 className="text-sm font-bold text-slate-900">
+                  Select Calibrated Demo Test Picture
                 </h3>
               </div>
               <button
                 onClick={() => setShowDemoModal(false)}
-                className="p-1 rounded text-slate-400 hover:text-slate-600"
+                className="p-1 rounded text-slate-400 hover:text-slate-600 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* 1-Click Complete Pair Section */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wider">
-                  ⚡ 1-Click Verification Scenarios (Loads Sample + Ref Card)
-                </span>
-                <span className="text-[10px] text-slate-500 font-medium">Ready for immediate testing</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <button
-                  onClick={() => handleSelectFullScenario('cobalt-positive-warm')}
-                  className="p-2.5 rounded-md bg-slate-50 hover:bg-blue-50/60 border border-slate-200 hover:border-blue-400 text-left transition cursor-pointer flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900 text-xs">Cocaine Positive</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-blue-100 text-blue-800">
-                        POSITIVE
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      Cobalt Thiocyanate precipitate with warm ambient lighting cast.
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-blue-700 font-medium mt-2">Load Full Pair &rarr;</span>
-                </button>
-
-                <button
-                  onClick={() => handleSelectFullScenario('cobalt-negative-warm')}
-                  className="p-2.5 rounded-md bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-400 text-left transition cursor-pointer flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900 text-xs">Cocaine Negative</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-slate-200 text-slate-800">
-                        NEGATIVE
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      Unreacted pink reagent solution indicating absence of cocaine.
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-slate-700 font-medium mt-2">Load Full Pair &rarr;</span>
-                </button>
-
-                <button
-                  onClick={() => handleSelectFullScenario('marquis-positive-neutral')}
-                  className="p-2.5 rounded-md bg-slate-50 hover:bg-purple-50/60 border border-slate-200 hover:border-purple-400 text-left transition cursor-pointer flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900 text-xs">Opiates Positive</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-purple-100 text-purple-800">
-                        POSITIVE
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      Marquis Reagent deep purple reaction under neutral daylight.
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-purple-700 font-medium mt-2">Load Full Pair &rarr;</span>
-                </button>
-
-                <button
-                  onClick={() => handleSelectFullScenario('duquenois-positive-warm')}
-                  className="p-2.5 rounded-md bg-slate-50 hover:bg-purple-50/60 border border-slate-200 hover:border-purple-400 text-left transition cursor-pointer flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900 text-xs">THC / Cannabis Positive</span>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-purple-100 text-purple-800">
-                        POSITIVE
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      Duquenois-Levine violet chloroform bottom layer.
-                    </p>
-                  </div>
-                  <span className="text-[10px] text-purple-700 font-medium mt-2">Load Full Pair &rarr;</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Individual Step Loading & Defect Tests */}
-            <div className="pt-2 border-t border-slate-100 space-y-2">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block">
-                Quality Gate Diagnostic Tests:
-              </span>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  onClick={() => handleSelectPreset('defect-blurry')}
-                  className="p-2 rounded-md bg-white hover:bg-slate-50 border border-slate-200 text-left transition cursor-pointer"
-                >
-                  <div className="font-medium text-slate-800 text-[11px]">Blur Diagnostic</div>
-                  <div className="text-[10px] text-slate-500">Motion/focus gate trigger</div>
-                </button>
-                <button
-                  onClick={() => handleSelectPreset('defect-glare')}
-                  className="p-2 rounded-md bg-white hover:bg-slate-50 border border-slate-200 text-left transition cursor-pointer"
-                >
-                  <div className="font-medium text-slate-800 text-[11px]">Specular Glare</div>
-                  <div className="text-[10px] text-slate-500">Flash reflection test</div>
-                </button>
-              </div>
-            </div>
+            <DemoPicturesGallery
+              onSelectScenario={async (preset) => {
+                setShowDemoModal(false);
+                await handleSelectFullScenario(preset);
+              }}
+              compact={true}
+            />
           </div>
         </div>
       )}

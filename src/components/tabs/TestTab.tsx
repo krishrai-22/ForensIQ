@@ -6,28 +6,14 @@
 import React, { useState } from 'react';
 import {
   FlaskConical,
-  Camera,
-  RotateCcw,
-  Sparkles,
-  Clock,
-  ChevronDown,
-  Info,
-  CheckCircle2,
   AlertTriangle,
   ArrowRight,
-  Zap,
 } from 'lucide-react';
 import { PresumptiveDisclaimerBanner } from '../PresumptiveDisclaimerBanner.tsx';
 import { CaptureView, type DualCaptureResult } from '../CaptureView.tsx';
 import { CalibrationView } from '../CalibrationView.tsx';
 import { SignedRecordModal } from '../SignedRecordModal.tsx';
 import { createAndSignTestRecord } from '../../lib/recordSigning.ts';
-import { evaluateQualityGates } from '../../lib/qualityGates.ts';
-import {
-  generateSyntheticSampleImage,
-  generateSyntheticReferenceCardImage,
-  type SyntheticPreset,
-} from '../../lib/syntheticImages.ts';
 import type { OperatorProfile, KitProfile, CalibrationData, TestRecordEntity } from '../../types/index.ts';
 import type { ClassificationResult } from '../../lib/classifier.ts';
 import kitProfilesData from '../../data/kitProfiles.json';
@@ -71,56 +57,6 @@ export const TestTab: React.FC<TestTabProps> = ({
   const handleRetake = () => {
     setDualCaptureData(null);
     setWorkflowStep('capture');
-  };
-
-  // 1-Click Complete Scenario Loader
-  const handleQuickLoadScenario = async (preset: SyntheticPreset, kitId: string) => {
-    setSelectedKitId(kitId);
-    setIsSigning(false);
-    try {
-      // 1. Generate Sample
-      const sampleResult = await generateSyntheticSampleImage(preset);
-      const img1 = new Image();
-      await new Promise<void>((r) => { img1.onload = () => r(); img1.src = sampleResult.dataUrl; });
-      const c1 = document.createElement('canvas');
-      c1.width = img1.naturalWidth || 800;
-      c1.height = img1.naturalHeight || 600;
-      const ctx1 = c1.getContext('2d')!;
-      ctx1.drawImage(img1, 0, 0);
-      const sampleEval = evaluateQualityGates(ctx1.getImageData(0, 0, c1.width, c1.height));
-
-      // 2. Generate Card
-      const cardResult = await generateSyntheticReferenceCardImage(preset);
-      const img2 = new Image();
-      await new Promise<void>((r) => { img2.onload = () => r(); img2.src = cardResult.dataUrl; });
-      const c2 = document.createElement('canvas');
-      c2.width = img2.naturalWidth || 800;
-      c2.height = img2.naturalHeight || 600;
-      const ctx2 = c2.getContext('2d')!;
-      ctx2.drawImage(img2, 0, 0);
-      const cardEval = evaluateQualityGates(ctx2.getImageData(0, 0, c2.width, c2.height));
-
-      setDualCaptureData({
-        sample: {
-          imageUrl: sampleResult.dataUrl,
-          blob: sampleResult.blob,
-          evaluation: sampleEval,
-        },
-        referenceCard: {
-          imageUrl: cardResult.dataUrl,
-          blob: cardResult.blob,
-          evaluation: cardEval,
-        },
-        syntheticPresetUsed: preset,
-        reactionElapsedSeconds: activeKit.requiredReadTimeSeconds || 30,
-        reactionTimeFlag: 'ON_TIME',
-      });
-
-      setWorkflowStep('calibration');
-    } catch (err) {
-      console.error('Quick load error:', err);
-      setSigningError('Error loading test scenario: ' + String(err));
-    }
   };
 
   const handleProceedToSign = async (
@@ -180,49 +116,8 @@ export const TestTab: React.FC<TestTabProps> = ({
                     Reagent Test Protocol
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Select verified field chemical kit or load a 1-click test scenario.
+                    Select verified field chemical kit protocol.
                   </p>
-                </div>
-              </div>
-
-              {/* Quick Scenario Pills */}
-              <div className="p-3 rounded-lg bg-[#e9edf2] border border-slate-300 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Quick Verification Scenarios</span>
-                  </span>
-                  <span className="text-[10px] text-slate-500 font-mono">1-Click Tests</span>
-                </div>
-                <div className="grid grid-cols-2 gap-1.5 pt-0.5">
-                  <button
-                    onClick={() => handleQuickLoadScenario('cobalt-positive-warm', 'cobalt-thiocyanate')}
-                    className="px-2.5 py-1.5 rounded-md bg-white hover:bg-blue-50/80 text-blue-950 border border-slate-300 hover:border-blue-400 text-xs font-medium transition cursor-pointer text-left flex items-center justify-between shadow-2xs"
-                  >
-                    <span>Cocaine (+)</span>
-                    <span className="text-[9px] font-mono font-bold text-blue-700 bg-blue-100/90 px-1.5 py-0.5 rounded">POS</span>
-                  </button>
-                  <button
-                    onClick={() => handleQuickLoadScenario('cobalt-negative-warm', 'cobalt-thiocyanate')}
-                    className="px-2.5 py-1.5 rounded-md bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 hover:border-slate-400 text-xs font-medium transition cursor-pointer text-left flex items-center justify-between shadow-2xs"
-                  >
-                    <span>Cocaine (-)</span>
-                    <span className="text-[9px] font-mono font-bold text-slate-700 bg-slate-200/90 px-1.5 py-0.5 rounded">NEG</span>
-                  </button>
-                  <button
-                    onClick={() => handleQuickLoadScenario('marquis-positive-neutral', 'marquis-reagent')}
-                    className="px-2.5 py-1.5 rounded-md bg-white hover:bg-purple-50/80 text-purple-950 border border-slate-300 hover:border-purple-400 text-xs font-medium transition cursor-pointer text-left flex items-center justify-between shadow-2xs"
-                  >
-                    <span>Opiates (+)</span>
-                    <span className="text-[9px] font-mono font-bold text-purple-700 bg-purple-100/90 px-1.5 py-0.5 rounded">POS</span>
-                  </button>
-                  <button
-                    onClick={() => handleQuickLoadScenario('duquenois-positive-warm', 'duquenois-levine')}
-                    className="px-2.5 py-1.5 rounded-md bg-white hover:bg-emerald-50/80 text-emerald-950 border border-slate-300 hover:border-emerald-400 text-xs font-medium transition cursor-pointer text-left flex items-center justify-between shadow-2xs"
-                  >
-                    <span>THC (+)</span>
-                    <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-100/90 px-1.5 py-0.5 rounded">POS</span>
-                  </button>
                 </div>
               </div>
 
