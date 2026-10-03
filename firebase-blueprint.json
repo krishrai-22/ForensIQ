@@ -1,0 +1,157 @@
+{
+  "entities": {
+    "evidenceRecord": {
+      "title": "Evidence Record",
+      "description": "Cryptographically signed forensic field presumptive test record.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique UUID identifier of the record",
+          "maxLength": 64
+        },
+        "timestampIso": {
+          "type": "string",
+          "description": "ISO-8601 UTC timestamp of creation",
+          "maxLength": 64
+        },
+        "bootClockMs": {
+          "type": "number",
+          "description": "Monotonic performance hardware clock baseline"
+        },
+        "operatorId": {
+          "type": "string",
+          "description": "Officer badge or operator identifier",
+          "maxLength": 100
+        },
+        "badgeUnit": {
+          "type": "string",
+          "description": "Law enforcement unit or squad identifier",
+          "maxLength": 100
+        },
+        "kitProfileId": {
+          "type": "string",
+          "description": "Identifier of the test kit profile used",
+          "maxLength": 100
+        },
+        "kitProfileVersion": {
+          "type": "string",
+          "description": "Version of the test kit profile",
+          "maxLength": 32
+        },
+        "result": {
+          "type": "string",
+          "description": "Analytical outcome of the presumptive assay",
+          "enum": ["POSITIVE", "NEGATIVE", "INCONCLUSIVE", "INVALID"],
+          "maxLength": 32
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Statistical confidence score between 0.0 and 1.0"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Scientific justification of the classification",
+          "maxLength": 500
+        },
+        "recordHashSha256": {
+          "type": "string",
+          "description": "SHA-256 hash of canonical record payload",
+          "maxLength": 128
+        },
+        "imageHashSha256": {
+          "type": "string",
+          "description": "SHA-256 hash of raw captured image bytes",
+          "maxLength": 128
+        },
+        "prevRecordHash": {
+          "type": "string",
+          "description": "SHA-256 hash of previous block in the audit ledger",
+          "maxLength": 128
+        },
+        "publicKeyFingerprint": {
+          "type": "string",
+          "description": "SHA-256 fingerprint of the officer public key",
+          "maxLength": 128
+        },
+        "signatureHex": {
+          "type": "string",
+          "description": "ECDSA P-256 digital signature over record hash",
+          "maxLength": 256
+        },
+        "tampered": {
+          "type": "boolean",
+          "description": "Flag indicating if tampering has been detected"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the submitting user",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Server creation timestamp ISO",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "timestampIso",
+        "operatorId",
+        "kitProfileId",
+        "result",
+        "recordHashSha256",
+        "signatureHex"
+      ]
+    },
+    "userProfile": {
+      "title": "User Profile",
+      "description": "Operator profile information for authenticated personnel.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 200
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name",
+          "maxLength": 100
+        },
+        "badgeUnit": {
+          "type": "string",
+          "description": "Assigned unit or squad",
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of user",
+          "enum": ["officer", "supervisor", "admin", "analyst"],
+          "maxLength": 32
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of profile creation",
+          "maxLength": 64
+        }
+      },
+      "required": ["userId", "email"]
+    }
+  },
+  "firestore": {
+    "/records/{recordId}": {
+      "schema": "evidenceRecord",
+      "description": "Global synchronized chain-of-custody test records"
+    },
+    "/users/{userId}": {
+      "schema": "userProfile",
+      "description": "Officer and personnel profiles"
+    }
+  }
+}

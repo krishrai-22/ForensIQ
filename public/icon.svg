@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="app-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f" />
+      <stop offset="50%" stop-color="#071324" />
+      <stop offset="100%" stop-color="#020817" />
+    </linearGradient>
+
+    <!-- Glass Rim Gradient -->
+    <linearGradient id="rim-grad" x1="100" y1="100" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="35%" stop-color="#2563eb" />
+      <stop offset="70%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Handle Gradient -->
+    <linearGradient id="handle-grad" x1="330" y1="330" x2="450" y2="450" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#64748b" />
+      <stop offset="45%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+
+    <!-- Lens Glass Background -->
+    <radialGradient id="lens-interior" cx="225" cy="225" r="150" fx="190" fy="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.45" />
+      <stop offset="80%" stop-color="#0f172a" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.3" />
+    </radialGradient>
+
+    <!-- Pill Top Half (Cyan Blue) -->
+    <linearGradient id="icon-pill-top" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Pill Bottom Half (Crisp White) -->
+    <linearGradient id="icon-pill-bottom" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+  </defs>
+
+  <!-- App Icon Background Card -->
+  <rect width="512" height="512" rx="112" fill="url(#app-bg)" />
+  <rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.3" />
+
+  <!-- Magnifying Glass Handle -->
+  <path d="M336 336 L446 446" stroke="url(#handle-grad)" stroke-width="48" stroke-linecap="round" />
+  <path d="M358 358 L420 420" stroke="#93c5fd" stroke-width="16" stroke-linecap="round" opacity="0.75" />
+
+  <!-- Outer Search Lens Circle -->
+  <circle cx="224" cy="224" r="148" fill="url(#lens-interior)" stroke="url(#rim-grad)" stroke-width="28" />
+
+  <!-- Glass Arc Highlight (Reflection) -->
+  <path d="M128 178 A110 110 0 0 1 178 128" stroke="#ffffff" stroke-width="12" stroke-linecap="round" opacity="0.65" />
+
+  <!-- Reticle Alignment Notches -->
+  <line x1="224" y1="46" x2="224" y2="66" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" opacity="0.8" />
+  <line x1="46" y1="224" x2="66" y2="224" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" opacity="0.8" />
+  <line x1="224" y1="382" x2="224" y2="402" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" opacity="0.8" />
+
+  <!-- Medicine Capsule inside the Magnifying Lens -->
+  <!-- Centered at (224, 224) and rotated 45 degrees -->
+  <g transform="translate(224, 224) rotate(45) translate(-40, -80)">
+    <!-- Base Shape -->
+    <rect x="0" y="0" width="80" height="160" rx="40" fill="#0f172a" stroke="#0a192f" stroke-width="4" />
+
+    <!-- Top Half (Medical Cyan Blue) -->
+    <path d="M0 40 C0 17.9 17.9 0 40 0 C62.1 0 80 17.9 80 40 V80 H0 Z" fill="url(#icon-pill-top)" />
+
+    <!-- Bottom Half (Medical White) -->
+    <path d="M0 80 H80 V120 C80 142.1 62.1 160 40 160 C17.9 160 0 142.1 0 120 Z" fill="url(#icon-pill-bottom)" />
+
+    <!-- Dividing Band / Seam -->
+    <line x1="0" y1="80" x2="80" y2="80" stroke="#0f172a" stroke-width="6" opacity="0.8" />
+
+    <!-- Pill Highlight Streak -->
+    <path d="M16 28 C16 18 24 12 34 12" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.9" />
+
+    <!-- Medical Plus Symbol on White Half -->
+    <rect x="34" y="102" width="12" height="34" rx="3" fill="#0284c7" opacity="0.9" />
+    <rect x="23" y="113" width="34" height="12" rx="3" fill="#0284c7" opacity="0.9" />
+  </g>
+</svg>

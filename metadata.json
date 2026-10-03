@@ -1,0 +1,11 @@
+{
+  "name": "Remix Remix FieldTest Companion",
+  "description": "Offline-first presumptive field drug-test companion with tamper-evident digital records for law enforcement.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

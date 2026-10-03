@@ -1,0 +1,90 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email == 'barelyknownit@gmail.com' && request.auth.token.email_verified == true) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation for User Profiles
+    function isValidUser(data) {
+      return data.keys().hasAll(['userId', 'email']) &&
+        data.keys().hasOnly(['userId', 'email', 'displayName', 'badgeUnit', 'role', 'createdAt', 'updatedAt']) &&
+        data.userId is string && data.userId.size() <= 128 &&
+        data.email is string && data.email.size() <= 200 &&
+        (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100)) &&
+        (!('badgeUnit' in data) || (data.badgeUnit is string && data.badgeUnit.size() <= 100)) &&
+        (!('role' in data) || (data.role in ['officer', 'supervisor', 'admin', 'analyst']));
+    }
+
+    // Validation for Forensic Evidence Records
+    function isValidRecord(data) {
+      return data.keys().hasAll(['id', 'timestampIso', 'operatorId', 'kitProfileId', 'result', 'recordHashSha256', 'signatureHex']) &&
+        data.id is string && data.id.size() <= 128 &&
+        data.timestampIso is string && data.timestampIso.size() <= 64 &&
+        data.operatorId is string && data.operatorId.size() <= 100 &&
+        data.kitProfileId is string && data.kitProfileId.size() <= 100 &&
+        data.result in ['POSITIVE', 'NEGATIVE', 'INCONCLUSIVE', 'INVALID'] &&
+        data.recordHashSha256 is string && data.recordHashSha256.size() <= 128 &&
+        data.signatureHex is string && data.signatureHex.size() <= 256 &&
+        (!('badgeUnit' in data) || (data.badgeUnit is string && data.badgeUnit.size() <= 100)) &&
+        (!('confidence' in data) || (data.confidence is number && data.confidence >= 0.0 && data.confidence <= 1.0)) &&
+        (!('reason' in data) || (data.reason is string && data.reason.size() <= 500)) &&
+        (!('prevRecordHash' in data) || (data.prevRecordHash is string && data.prevRecordHash.size() <= 128)) &&
+        (!('publicKeyFingerprint' in data) || (data.publicKeyFingerprint is string && data.publicKeyFingerprint.size() <= 128)) &&
+        (!('imageHashSha256' in data) || (data.imageHashSha256 is string && data.imageHashSha256.size() <= 128)) &&
+        (!('tampered' in data) || (data.tampered is bool));
+    }
+
+    // User Profiles Collection
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isSignedIn() && request.auth.uid == userId && incoming().userId == userId && isValidUser(incoming());
+      allow update: if isSignedIn() && request.auth.uid == userId && incoming().userId == userId && isValidUser(incoming()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'badgeUnit', 'updatedAt']);
+      allow delete: if isAdmin();
+    }
+
+    // Evidence Records Collection
+    match /records/{recordId} {
+      // Any authenticated officer can read/verify the central evidence ledger
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+
+      // Only authenticated users can write new records, with matching ID and schema validity
+      allow create: if isSignedIn() && isValidId(recordId) && incoming().id == recordId && isValidRecord(incoming());
+
+      // Evidentiary immutability: Field test records are cryptographically sealed and cannot be modified
+      allow update: if false;
+
+      // Only administrators can prune or archive records
+      allow delete: if isAdmin();
+    }
+  }
+}

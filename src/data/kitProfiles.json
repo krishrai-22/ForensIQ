@@ -1,0 +1,114 @@
+[
+  {
+    "id": "cobalt-thiocyanate",
+    "name": "Cobalt Thiocyanate (Scott Reagent)",
+    "substanceClass": "Cocaine HCl & Cocaine Base (Crack) - Presumptive Only",
+    "requiredReadTimeSeconds": 30,
+    "readTimeToleranceSeconds": 15,
+    "version": "1.0.0",
+    "disclaimer": "Illustrative profile for presumptive screening. Must be calibrated on physical kit batches.",
+    "reagentSteps": [
+      "1. Add suspect powder/residue into ampoule 1 (Cobalt Thiocyanate in water/glycerin).",
+      "2. Break ampoule 2 (Hydrochloric acid) and observe blue precipitate formation.",
+      "3. Break ampoule 3 (Chloroform) and shake for 10 seconds. Observe bottom layer color at 30 seconds."
+    ],
+    "outcomes": [
+      {
+        "id": "cocaine_positive",
+        "label": "Cobalt Blue Precipitate / Organic Layer (Positive Indication)",
+        "category": "POSITIVE",
+        "referenceLab": [38.5, -12.4, -42.8],
+        "toleranceDeltaE": 22.0,
+        "description": "Characteristic brilliant cobalt blue in the bottom chloroform layer indicates presumptive presence of cocaine."
+      },
+      {
+        "id": "negative_pink",
+        "label": "Pinkish / Clear (Negative Indication)",
+        "category": "NEGATIVE",
+        "referenceLab": [68.2, 28.5, 8.2],
+        "toleranceDeltaE": 24.0,
+        "description": "Remaining pink unreacted solution indicates absence of detectable cocaine threshold."
+      },
+      {
+        "id": "inconclusive_turbid",
+        "label": "Dirty Brown / Turbid",
+        "category": "INCONCLUSIVE",
+        "referenceLab": [45.0, 5.0, 15.0],
+        "toleranceDeltaE": 18.0,
+        "description": "Ambiguous turbidity from adulterants or excessive cutting agents."
+      }
+    ]
+  },
+  {
+    "id": "marquis-reagent",
+    "name": "Marquis Reagent (Formaldehyde-Sulfuric Acid)",
+    "substanceClass": "Opiates, Amphetamines & MDMA - Presumptive Only",
+    "requiredReadTimeSeconds": 45,
+    "readTimeToleranceSeconds": 15,
+    "version": "1.0.0",
+    "disclaimer": "Illustrative profile for presumptive screening. Strongly time-sensitive color development.",
+    "reagentSteps": [
+      "1. Place a pinhead amount of sample onto porcelain test well.",
+      "2. Dispense 1 drop of Marquis Reagent directly onto sample.",
+      "3. Start reaction timer immediately. Read color development between 30 and 60 seconds."
+    ],
+    "outcomes": [
+      {
+        "id": "opiates_violet",
+        "label": "Deep Purple / Violet (Presumptive Opiates / Heroin / Morphine)",
+        "category": "POSITIVE",
+        "referenceLab": [22.0, 26.5, -28.0],
+        "toleranceDeltaE": 24.0,
+        "description": "Rapid development of deep purple/violet indicates morphine, codeine, or heroin."
+      },
+      {
+        "id": "amphetamine_orange_brown",
+        "label": "Orange to Red-Brown (Presumptive Amphetamine / Methamphetamine)",
+        "category": "POSITIVE",
+        "referenceLab": [42.0, 32.0, 48.0],
+        "toleranceDeltaE": 22.0,
+        "description": "Immediate orange transitioning to reddish-brown indicates amphetamine or methamphetamine."
+      },
+      {
+        "id": "marquis_negative",
+        "label": "Clear / Pale Straw (No Reaction)",
+        "category": "NEGATIVE",
+        "referenceLab": [85.0, -2.0, 14.0],
+        "toleranceDeltaE": 20.0,
+        "description": "Absence of color change indicates no detectable target alkaloids."
+      }
+    ]
+  },
+  {
+    "id": "duquenois-levine",
+    "name": "Duquenois-Levine Reagent",
+    "substanceClass": "Cannabinoids (THC / Marijuana / Hashish) - Presumptive Only",
+    "requiredReadTimeSeconds": 60,
+    "readTimeToleranceSeconds": 20,
+    "version": "1.0.0",
+    "disclaimer": "Illustrative profile for presumptive screening. Three-phase extraction read.",
+    "reagentSteps": [
+      "1. Add crushed vegetative material or extract to tube.",
+      "2. Add Duquenois reagent and concentrated hydrochloric acid; agitate.",
+      "3. Add chloroform; observe color transfer into bottom layer at 60 seconds."
+    ],
+    "outcomes": [
+      {
+        "id": "thc_violet",
+        "label": "Indigo / Violet Chloroform Layer (Positive Indication)",
+        "category": "POSITIVE",
+        "referenceLab": [30.0, 22.0, -32.0],
+        "toleranceDeltaE": 22.0,
+        "description": "Transfer of violet-blue dye into the lower chloroform layer indicates presumptive cannabinoids."
+      },
+      {
+        "id": "dl_negative",
+        "label": "Colorless / Pale Green Upper Layer (Negative Indication)",
+        "category": "NEGATIVE",
+        "referenceLab": [72.0, -18.0, 22.0],
+        "toleranceDeltaE": 25.0,
+        "description": "Absence of violet color transfer into the organic chloroform layer."
+      }
+    ]
+  }
+]
